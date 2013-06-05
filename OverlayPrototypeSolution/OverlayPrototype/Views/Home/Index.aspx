@@ -31,7 +31,6 @@
 		
 		#admin-content.expanded
 		{
-			height: 100%; /* show the hidden content */
 			transition: all .25s ease;	
 		}	
 		
@@ -109,6 +108,7 @@
 		.admin-section
 		{
 			display: none;
+			margin: 10px;
 		}
 		
 		.admin-section.displayed
@@ -174,7 +174,7 @@
 			section.addClass('displayed');
 			
 			/* set '#admin-content' so it animates and ensure toggle is 'on' */
-			$('#admin-content').addClass('expanded').css('height', section.height());
+			$('#admin-content').addClass('expanded').css('height', section.outerHeight(true));
 			$('#admin-toggle').prop('checked', true);
 			
 			/* give the first text input focus */
