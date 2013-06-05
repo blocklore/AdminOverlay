@@ -31,10 +31,11 @@
 		
 		#admin-content.expanded
 		{
+			/* height: 100%; // the height will be dynamically added when calculated */
 			transition: all .25s ease;	
 		}	
 		
-		.admin-section *
+		.admin-section span *
 		{
 			padding: .2em .5em;
 			font: .9em arial,sans-serif;
@@ -116,8 +117,108 @@
 			display: block;
 		}
 		
+		#settings-nav-wrapper
+		{
+			margin: 50px 0px 0px 50px;		
+		}
+		
+		#settings-nav
+		{
+			margin: 0;
+			padding: 0;
+			
+			display: -webkit-box;
+			box-sizing: border-box;
+			box-shadow: 0 0 8px rgba(0,0,0,0.2);
+
+			font-family: "Whitney Cond A","Whitney Cond B","ronnia-condensed",sans-serif;
+			font-weight: 700;
+			font-style: normal;
+			font-size: 26px;
+		}
+		
+		#settings-content
+		{
+			position: relative;
+			box-sizing: border-box;
+			padding: 20px;
+			
+			background-color: white;
+		}
+		
+		#settings-content:after
+		{
+			content: "";
+			position: absolute;
+			right: 100%;
+			margin-right: 7px;
+			top: 0;
+			width: 50px;
+			bottom: 0;
+			background: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, rgba(0,0,0,0)), color-stop(100%, rgba(0,0,0,0.4)));
+			background: -webkit-linear-gradient(left, rgba(0,0,0,0),rgba(0,0,0,0.4));
+			background: -moz-linear-gradient(left, rgba(0,0,0,0),rgba(0,0,0,0.4));
+			background: -o-linear-gradient(left, rgba(0,0,0,0),rgba(0,0,0,0.4));
+			background: linear-gradient(left, rgba(0,0,0,0),rgba(0,0,0,0.4));
+			pointer-events: none;	
+		}	
+		
+		#settings-nav ul
+		{
+			list-style: none;
+			list-style-image: none;
+			
+			background-color: grey;		
+		}
+		
+		#settings-nav li a
+		{
+			display: block;
+			padding: 10px 40px 10px 20px;
+			
+			font-family: "Whitney Cond A","Whitney Cond B","ronnia-condensed",sans-serif;
+			font-weight: 700;
+			font-style: normal;
+			font-size: 26px;
+			text-decoration: none;
+			
+			color: white;
+		}
+		
+		#settings-nav li:nth-child(1) a
+		{
+			background: #de4206;
+		}
+		#settings-nav li:nth-child(2) a
+		{
+			background: #fd7c2a;
+		}		
+		#settings-nav li:nth-child(3) a
+		{
+			background: #efb62b;
+		}
+		
+		#settings-nav li a:active, #settings-nav li a.selected
+		{
+			position: relative;
+			z-index: 1;
+		}
+		
+		.settings
+		{
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		
+		.settings:target
+		{
+			position: relative;
+			top: 0;
+			left: 0;
+		}
+		
 		/*
-		#admin-settings { height: 200px; }
 		#admin-console { height: 180px; }
 		#admin-logs { height: 220px; }
 		*/
@@ -196,6 +297,16 @@
 				DisplayTab($input);
 			});
 			
+			$('a').click(function () {
+				
+				var $input = $(this);
+				
+				$('a').removeClass('selected');
+				$input.addClass('selected');
+			});
+			
+			$('#settings-nav').wrap('<div id="settings-nav-wrapper" />');
+			
 			$('#admin-toggle').click(function () {
 			
 				var $input = $(this);
@@ -262,25 +373,30 @@
 				<label for="admin-search-box"><span>Filter:</span></label>		
 				<input id="admin-search-box" type="text" />
 				
-				<div id="settings-nav" >
+				<nav id="settings-nav" >
 					<ul>
 						<li><a href="#settings-display">Display</a></li>
 						<li><a href="#settings-skins">Skins</a></li>
 						<li><a href="#settings-repository">Repository</a></li>
 					</ul>
-				</div>
-				<div id="settings-display" class="settings">
-					<h1>Display Settings</h1>
-					<p>Some display settings go here!</p>
-				</div>
-				<div id="settings-skins" class="settings">
-					<h1>Skin Settings</h1>
-					<p>Some skin settings go here!</p>	
-				</div>
-				<div id="settings-repository" class="settings">
-					<h1>Repository Settings</h1>
-					<p>Some repository settings go here!</p>				
-				</div>
+					
+					<div id="settings-content">
+						<div id="settings-display" class="settings">
+							<h1>Display Settings</h1>
+							<p>Some display settings go here!</p>
+						</div>
+						
+						<div id="settings-skins" class="settings">
+							<h1>Skin Settings</h1>
+							<p>Some skin settings go here!</p>	
+						</div>
+						
+						<div id="settings-repository" class="settings">
+							<h1>Repository Settings</h1>
+							<p>Some repository settings go here!</p>				
+						</div>
+					</div>
+				</nav>
 			</div>
 			
 			<div id="admin-logs" class="admin-section">
