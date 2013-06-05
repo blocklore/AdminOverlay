@@ -23,9 +23,7 @@
 		
 		#admin-content
 		{
-			height: 30px; /* initial height */
-			margin-top: -50px; /* initially hidden above screen */
-			padding: 10px;
+			height: 0px; /* initial height */
 			border: 0px solid orange;
 			border-bottom-width: 5px;
 			color: white;
@@ -33,28 +31,30 @@
 		
 		#admin-content.expanded
 		{
-			margin-top: 0px; /* show the hidden content */
+			height: 100%; /* show the hidden content */
 			transition: all .25s ease;	
 		}	
 		
-		#admin-search *
+		.admin-section *
 		{
 			padding: .2em .5em;
 			font: .9em arial,sans-serif;
 		}
 		
-		#admin-search input[type="text"]
+		.admin-section input[type="text"]
 		{
 			width: 80%;
 			margin-right: 5px;
 		}
 		
-		#admin-tab
+		#admin-tabs
 		{ 
 			position: absolute;
 			display: -webkit-box;
 			z-index: 2;
 			right: 50px;
+			
+			font: .9em arial,sans-serif;
 
 			border: 0px solid black;
 			border-right-width: 2px;
@@ -65,27 +65,28 @@
 			padding-left: 5px;
 			padding-right: 5px;
 			overflow: auto;
-			/* background: #222222 url("<%= Url.Content("~/img/wild_oliva.png") %>") fixed;	*/
 			background: black;
 		}
 		
-		#admin-tab ul
+		#admin-tabs ul
 		{
+			/* no dots */
 			list-style: none;
 		}
 		
-		#admin-tab ul li
+		#admin-tabs ul li
 		{
 			display: inline;
 		}
 		
-		#admin-tab ul li span
+		#admin-tabs ul li span
 		{			
 			float: left;
 			display: block;
 			border-bottom-left-radius: 5px;
 			border-bottom-right-radius: 5px;
 			padding: 5px;
+			margin-bottom: 3px;
 			text-transform: uppercase;
 			color: white;			
 			border-style: solid;
@@ -93,25 +94,38 @@
 			border-width: 0px 1px 1px 0px;	
 		}
 		
-		#admin-tab ul li.selected span 
+		#admin-tabs ul li.selected span 
 		{
 			background-color: orange;
 			border: 0px;	
 		}
 		
-		#admin-tab label
+		#admin-tabs label
 		{
-			margin: 5px;
+		    padding: 5px 0px 0px 20px;
+		    margin-left: 5px;
+		}
+		
+		.admin-section
+		{
+			display: none;
+		}
+		
+		.admin-section.displayed
+		{
+			display: block;
 		}
 		
 		/*
-		#admin-tab ul, #admin-tab li, #admin-tab span, #admin-tab input { float: left; }
+		#admin-settings { height: 200px; }
+		#admin-console { height: 180px; }
+		#admin-logs { height: 220px; }
 		*/
 		
-		#admin-tab span { padding-top: 3px; }
-		#admin-tab > span { color: grey; }	
-		#admin-tab > span:first-child { margin-right: 8px; }
-		
+	</style>
+	
+	<style>
+	
 		/* custom checkbox style! */
 		input[type="checkbox"]
 		{
@@ -123,8 +137,7 @@
 			color: white;		
 		    display:inline-block;
 		    height:19px;
-		    padding-left: 20px;
-		    vertical-align:middle;
+		    vertical-align:bottom;
 		    background:url("<%= Url.Content("~/img/DownTriangle.png") %>") left no-repeat;			    
 		    cursor:pointer;
 		}
@@ -149,17 +162,58 @@
   	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>	
 	<script>
+	
+		function DisplayTab(adminTab) {
+		
+			/* remove 'displayed' from any/all sections */
+			$('.admin-section').removeClass('displayed');
+			
+			/* get section id from tab and add 'displayed' class */
+			var sectionName = adminTab.data('section-name');
+			var section = $('#' + sectionName);
+			section.addClass('displayed');
+			
+			/* set '#admin-content' so it animates and ensure toggle is 'on' */
+			$('#admin-content').addClass('expanded').css('height', section.height());
+			$('#admin-toggle').prop('checked', true);
+			
+			/* give the first text input focus */
+			section.children('input[type="text"]').focus();
+		}
 		
 		$(document).ready(function () {
 
 			$('#admin-content button').button();
+			
+			$('.admin-tab').click(function () {
+			
+				var $input = $(this);
+				
+				/* remove current selection, mark clicked tab as selected */
+				$('.admin-tab').removeClass('selected');
+				$input.addClass('selected');
+				
+				DisplayTab($input);
+			});
+			
 			$('#admin-toggle').click(function () {
+			
 				var $input = $(this);
 				$('#admin-content').toggleClass('expanded');
-				if ($input.prop('checked'))	
-					$('#admin-search input[type="text"]').focus();
+				
+				if ($input.prop('checked'))	{
+				
+					/* find the current selected tab, show it */
+					var selectedAdminTab = $('.admin-tab.selected');
+					DisplayTab(selectedAdminTab);
+				}
 				else
+				{
+					/* hide everything */
+					$('#admin-content').removeClass('expanded').css('height', '0px');
+					$('.admin-section').removeClass('displayed');	
 					$('iframe').focus();
+				}
 			});
 			
 			var availableTags = [
@@ -186,7 +240,7 @@
 				"Scala",
 				"Scheme"
 			];
-			$('#admin-search input[type="text"]').autocomplete({
+			$('#admin-console input[type="text"]').autocomplete({
 			  source: availableTags
 			});			
 		});
@@ -197,18 +251,50 @@
 	<!-- Overlay -->
 	<div id="admin-overlay">
 		<div id="admin-content">
-			<div id="admin-search">	
+		
+			<div id="admin-console" class="admin-section">	
 				<label for="admin-search-box"><span>Search:</span></label>		
 				<input id="admin-search-box" type="text" />
 				<button>Execute</button>
 			</div>
+			
+			<div id="admin-settings" class="admin-section">
+				<label for="admin-search-box"><span>Filter:</span></label>		
+				<input id="admin-search-box" type="text" />
+				
+				<div id="settings-nav" >
+					<ul>
+						<li><a href="#settings-display">Display</a></li>
+						<li><a href="#settings-skins">Skins</a></li>
+						<li><a href="#settings-repository">Repository</a></li>
+					</ul>
+				</div>
+				<div id="settings-display" class="settings">
+					<h1>Display Settings</h1>
+					<p>Some display settings go here!</p>
+				</div>
+				<div id="settings-skins" class="settings">
+					<h1>Skin Settings</h1>
+					<p>Some skin settings go here!</p>	
+				</div>
+				<div id="settings-repository" class="settings">
+					<h1>Repository Settings</h1>
+					<p>Some repository settings go here!</p>				
+				</div>
+			</div>
+			
+			<div id="admin-logs" class="admin-section">
+				<label for="admin-search-box"><span>Filter:</span></label>		
+				<input id="admin-search-box" type="text" />
+			</div>
+			
 		</div>
-		<div id="admin-tab">
+		<div id="admin-tabs">
 			<!-- <span><%= Html.Encode(ViewData["Message"]) %></span>-->
 			<ul>
-				<li class="selected"><span>Settings</span></li>
-				<li><span>Console</span></li>
-				<li><span>Logging</span></li>
+				<li class="admin-tab selected" data-section-name="admin-settings"><span>Settings</span></li>
+				<li class="admin-tab" data-section-name="admin-console"><span>Console</span></li>
+				<li class="admin-tab" data-section-name="admin-logs"><span>Logging</span></li>
 			</ul>
 			<input id="admin-toggle" type="checkbox" />
 			<label for="admin-toggle" ><span>Admin</span></label>		
