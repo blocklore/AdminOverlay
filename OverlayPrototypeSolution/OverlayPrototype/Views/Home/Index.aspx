@@ -26,7 +26,7 @@
 			height: 30px; /* initial height */
 			margin-top: -50px; /* initially hidden above screen */
 			padding: 10px;
-			border: 0px solid black;
+			border: 0px solid orange;
 			border-bottom-width: 5px;
 			color: white;
 		}
@@ -52,6 +52,7 @@
 		#admin-tab
 		{ 
 			position: absolute;
+			display: -webkit-box;
 			z-index: 2;
 			right: 50px;
 
@@ -61,16 +62,55 @@
 			border-left-width: 2px;
 			border-bottom-right-radius: 8px;
 			border-bottom-left-radius: 8px;
-			padding: 5px;
+			padding-left: 5px;
+			padding-right: 5px;
 			overflow: auto;
 			/* background: #222222 url("<%= Url.Content("~/img/wild_oliva.png") %>") fixed;	*/
 			background: black;
 		}
 		
-		#admin-tab ul, #admin-tab il, #admin-tab span, #admin-tab input { float: left; }
+		#admin-tab ul
+		{
+			list-style: none;
+		}
+		
+		#admin-tab ul li
+		{
+			display: inline;
+		}
+		
+		#admin-tab ul li span
+		{			
+			float: left;
+			display: block;
+			border-bottom-left-radius: 5px;
+			border-bottom-right-radius: 5px;
+			padding: 5px;
+			text-transform: uppercase;
+			color: white;			
+			border-style: solid;
+			border-color: white;
+			border-width: 0px 1px 1px 0px;	
+		}
+		
+		#admin-tab ul li.selected span 
+		{
+			background-color: orange;
+			border: 0px;	
+		}
+		
+		#admin-tab label
+		{
+			margin: 5px;
+		}
+		
+		/*
+		#admin-tab ul, #admin-tab li, #admin-tab span, #admin-tab input { float: left; }
+		*/
+		
 		#admin-tab span { padding-top: 3px; }
 		#admin-tab > span { color: grey; }	
-		#admin-tab span:first-child { margin-right: 8px; }
+		#admin-tab > span:first-child { margin-right: 8px; }
 		
 		/* custom checkbox style! */
 		input[type="checkbox"]
@@ -164,7 +204,12 @@
 			</div>
 		</div>
 		<div id="admin-tab">
-			<span><%= Html.Encode(ViewData["Message"]) %></span>
+			<!-- <span><%= Html.Encode(ViewData["Message"]) %></span>-->
+			<ul>
+				<li class="selected"><span>Settings</span></li>
+				<li><span>Console</span></li>
+				<li><span>Logging</span></li>
+			</ul>
 			<input id="admin-toggle" type="checkbox" />
 			<label for="admin-toggle" ><span>Admin</span></label>		
 		</div>
