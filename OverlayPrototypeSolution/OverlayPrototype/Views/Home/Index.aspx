@@ -110,23 +110,25 @@
 		{
 			display: none;
 			margin: 10px;
+			overflow: auto;
 		}
 		
 		.admin-section.displayed
 		{
 			display: block;
 		}
+	
+	</style>
+	
+	<style>
 		
 		#settings-nav-wrapper
 		{
-			margin: 50px 0px 0px 50px;		
+			margin: 50px 50px 50px 50px;		
 		}
 		
 		#settings-nav
 		{
-			margin: 0;
-			padding: 0;
-			
 			display: -webkit-box;
 			box-sizing: border-box;
 			box-shadow: 0 0 8px rgba(0,0,0,0.2);
@@ -137,13 +139,20 @@
 			font-size: 26px;
 		}
 		
+		#settings-nav > ul
+		{
+			width: 15%;
+		}
+		
 		#settings-content
 		{
 			position: relative;
 			box-sizing: border-box;
 			padding: 20px;
+			width: 85%;
 			
 			background-color: white;
+			color: black;
 		}
 		
 		#settings-content:after
@@ -274,8 +283,10 @@
 			var section = $('#' + sectionName);
 			section.addClass('displayed');
 			
+			var sectionOuterHeight = section.outerHeight(true);
+			
 			/* set '#admin-content' so it animates and ensure toggle is 'on' */
-			$('#admin-content').addClass('expanded').css('height', section.outerHeight(true));
+			$('#admin-content').addClass('expanded').css('height', sectionOuterHeight);
 			$('#admin-toggle').prop('checked', true);
 			
 			/* give the first text input focus */
