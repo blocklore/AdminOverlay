@@ -14,6 +14,7 @@
 		#iframe-wrapper { position:fixed; left:0; width:100%; top:0; height:100%; }
 		#iframe { border: none; display: block; width:100%; height:100%; }
 		
+<<<<<<< Upstream, based on origin/master
 		#admin-overlay
 		{ 
 			position: absolute; z-index: 2;
@@ -232,7 +233,12 @@
 		#admin-logs { height: 220px; }
 		*/
 		
+=======
+>>>>>>> 6244cc4 Split embedded css in 'index.aspx' into seperate css files.
 	</style>
+	
+	<link rel='stylesheet' href="<%= Url.Content("~/css/admin.css") %>"/>
+	<link rel='stylesheet' href="<%= Url.Content("~/css/settings.css") %>"/>
 	
 	<style>
 	
